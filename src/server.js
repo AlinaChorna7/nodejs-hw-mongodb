@@ -1,12 +1,15 @@
-import express from 'expres';
-import pino from 'pino-http';
+import express from 'express';
+import pino from 'pino';
 import cors from 'cors';
-import {env} from './utils/env';
-import {GetAllStudents, GetStudentsId} from './services/students.js';
+import { env } from './utils/env.js';
+import { getAllContacts } from './servises/contacts.js';
+import { getContactsId } from './servises/contacts.js';
+
 
 const PORT = Number(env('PORT','3008'));
 
-export const startServer = ()=>{
+
+export const setupServer = ()=>{
 const app = express();
 
 
@@ -21,10 +24,44 @@ app.use(
     }),
 );
 
-app.get('/', (req, res)=>{
-   res.json({
-    message: 'Hello world',
-   });
+
+
+
+app.get('/contacts', async (req, res)=>{
+
+try {
+    const contacts =await getAllContacts();
+        res.status(200).json({
+            status: 200,
+            data: contacts,
+            message: "Successfully found contacts!",
+        });
+} catch (error) {
+res.status(500).json({
+    message:   "Internal server error",error,
+});
+}
+});
+
+app.get('/contacts/:contactId', async(req, res, next)=>{
+try {
+        const {contactId} = req.params;
+    const contact = await getContactsId(contactId);
+    if(!contact){
+        return res.status(404).json({
+            message: 'Contact not found',
+        });
+    }
+    res.status(200).json({
+        status: 200,
+        message: `Successfully found contact with id ${contactId}!`,
+        data: contact,
+    });
+} catch (error) {
+    res.status(500).json({
+        message: "Internal server error",error,
+    });
+}
 });
 
 app.use('*', (req, res, next)=>{
@@ -33,36 +70,6 @@ app.use('*', (req, res, next)=>{
     });
 });
 
-app.use((err, req, res)=>{
-    res.status(500).json({
-        message: 'Something went wrong',
-        err: err.message,
-    });
-});
-
-app.get('/students',async (req, res)=>{
-const students = await GetAllStudents();
-
-res.status(200).json({
-    data: students,
-});
-});
-
-app.get('/students/:studentId', async (req, res, next)=>{
-const studentId = req.params;
-    const student = await GetStudentsId(studentId);
-
-if(!student){
-    res.status(404).json({
-        message: 'Student not found',
-    });
-    return;
-};
-
-res.status(200).json({
-    data: student,
-});
-});
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`);
