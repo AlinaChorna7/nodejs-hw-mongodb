@@ -1,12 +1,13 @@
 import express from 'express';
-import pino from 'pino';
+import pinoHttp from 'pino-http';
 import cors from 'cors';
-import { env } from './utils/env.js';
+
 import { getAllContacts } from './servises/contacts.js';
 import { getContactsId } from './servises/contacts.js';
 
 
-const PORT = Number(env('PORT','3008'));
+const PORT = Number(process.env.PORT) || 3000;
+
 
 
 export const setupServer = ()=>{
@@ -17,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use(
-    pino({
+    pinoHttp({
         transport: {
             target: 'pino-pretty',
           },
