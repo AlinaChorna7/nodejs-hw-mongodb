@@ -15,7 +15,9 @@ export const getContactsController = async(req, res)=>{
     const contact = await getContactsId(contactId);
     if(!contact){
       res.status(404).json({
-    message: 'No contact found',
+        status: 404,
+        data: null,
+        message: 'No contact found',
         });
     } else{
         res.status(200).json({
