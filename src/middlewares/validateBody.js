@@ -8,8 +8,14 @@ export const validateBody = (schema) => async (req, res, next)=>{
         );
         next();
     } catch (err) {
-        const error = createHttpError(404, 'Bad request',{
-            errors: err.details,
+
+const errorDetails = err.details.map(detail =>({
+    message: detail.message,
+    path: detail.path[0],
+    type: detail.type
+}));
+
+        const error = createHttpError(400 , 'Validation faild',{errors: errorDetails,
         });
         next(error);
     }
