@@ -1,7 +1,7 @@
 import express from 'express';
 import pinoHttp from 'pino-http';
 import cors from 'cors';
-import router from './routes/contacts.js';
+import router from './routes/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
