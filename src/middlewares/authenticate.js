@@ -40,6 +40,9 @@ if(isAccessTokenExpire){
     return;
 };
 
+const sessions = await SessionCollection.find({});
+console.log('Sessions:', sessions);
+
 const user = await UsersCollection.findById(session.userId);
 
 if(!user){
@@ -50,5 +53,6 @@ if(!user){
 req.user = user;
 
 next();
+
 
 };

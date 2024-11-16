@@ -13,12 +13,12 @@ router.use(authenticate);
 
 router.get('/', ctrlWrapper(getContactsController));
 
-router.get('/contacts/:contactId',isValidId, ctrlWrapper(getContactsByIdController));
+router.get('/:contactId',isValidId, ctrlWrapper(getContactsByIdController));
 
-router.post('/contacts',validateBody(createContactSchema), ctrlWrapper(createContactController));
+router.post('/',validateBody(createContactSchema), ctrlWrapper(createContactController));
 
-router.patch('/contacts/:contactId',isValidId, validateBody(updateContactSchema), ctrlWrapper(patchContactsController));
+router.patch('/:contactId',isValidId, validateBody(updateContactSchema), ctrlWrapper(patchContactsController));
 
-router.delete('/contacts/:contactId',isValidId, ctrlWrapper(deleteContactController));
+router.delete('/:contactId',isValidId, ctrlWrapper(deleteContactController));
 
 export default router;
