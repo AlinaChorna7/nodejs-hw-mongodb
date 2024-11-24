@@ -7,7 +7,7 @@ import { SessionCollection } from '../db/models/session.js';
 import {randomBytes} from 'crypto';
 import jwt from 'jsonwebtoken';
 import {env} from '../utils/env.js';
-import { SMTP } from '../constants/index.js';
+import { SMTP, APP, JWT } from '../constants/index.js';
 import {sendEmail} from '../utils/sendEmail.js';
 import handlebars from 'handlebars';
 import path from 'node:path';
@@ -117,9 +117,9 @@ const resetToken = jwt.sign(
       sub: user._id,
       email,
     },
-    env('JWT_SECRET'),
+    env(JWT.JWT_SECRET),
     {
-      expiresIn: '15m',
+      expiresIn: '5m',
     },
   );
   const resetPasswordTemplatePath = path.join(
@@ -133,7 +133,7 @@ const resetToken = jwt.sign(
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: `${env('APP_DOMAIN')}/reset-password?token=${resetToken}`,
+    link: `${env(APP.APP_DOMAIN)}/reset-password?token=${resetToken}`,
   });
   await sendEmail({
     from: env(SMTP.SMTP_FROM),
@@ -147,7 +147,7 @@ export const resetPassword = async(payload)=>{
 let entries;
 
 try {
-    entries = jwt.verify(payload.token, env('JWT_SECRET'));
+    entries = jwt.verify(payload.token, env(JWT.JWT_SECRET));
 } catch (error) {
     if (error instanceof Error) throw createHttpError(401, error.message);
     throw error;
@@ -170,5 +170,5 @@ await UsersCollection.updateOne(
 {password: encryptedPassword},
 );
 
-
+await SessionCollection.deleteOne({ _id: entries.sessionId });
 };
