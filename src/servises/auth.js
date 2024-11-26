@@ -13,7 +13,7 @@ import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import { TEMPLATES_DIR } from '../constants/index.js';
-
+import { getFullNameFromGoogleTokenPayload, validateCode } from '../utils/googleOAuth2.js';
 
 
 
@@ -171,4 +171,28 @@ await UsersCollection.updateOne(
 );
 
 await SessionCollection.deleteOne({ _id: entries.sessionId });
+};
+
+export const loginOrSignupWithGoogle = async (code)=>{
+const loginTicket = await validateCode(code);
+const payload = loginTicket.getPayload();
+if(!payload) throw createHttpError(401);
+
+let user = UsersCollection.findOne({email: payload.email});
+
+if(!user) {
+  const password = await bcrypt.hash(randomBytes(10), 10);
+  user = await UsersCollection.create({
+email: payload.email,
+name : getFullNameFromGoogleTokenPayload(payload),
+ password,
+role: 'parent'
+  });
+}
+const newSession = createSession();
+
+return await SessionCollection.create({
+userId: user._id,
+...newSession,
+});
 };
