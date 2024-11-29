@@ -221,6 +221,11 @@
                       "home",
                       "personal"
                     ]
+                  },
+                  "photo": {
+                    "description": "URL of the contact's photo",
+                    "type": "string",
+                    "example": "https://example.com/photo.jpg"
                   }
                 }
               }
@@ -386,6 +391,11 @@
                       "home",
                       "personal"
                     ]
+                  },
+                  "photo": {
+                    "description": "URL of the contact's photo",
+                    "type": "string",
+                    "example": "https://example.com/photo.jpg"
                   }
                 }
               }
@@ -451,34 +461,9 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Delete contact by id",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message",
-                    "data"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 200
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully deleted contact with id 65ca67e7ae7f10c88b598384!"
-                    },
-                    "data": {
-                      "type": "object",
-                      "$ref": "#/components/schemas/contact"
-                    }
-                  }
-                }
-              }
-            }
+          "204": {
+            "description": "Successfully deleted the contact",
+            "content": {}
           },
           "401": {
             "$ref": "#/components/responses/401"
