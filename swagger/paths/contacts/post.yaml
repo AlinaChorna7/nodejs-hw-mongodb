@@ -13,33 +13,39 @@ requestBody:
         required:
           - name
           - phoneNumber
-          - email
-          - isFavourite
           - contactType
         properties:
           name:
             description: "Contact's name"
             type: string
             example: 'John Doe'
+            minLength: 3
+            maxLength: 20
           phoneNumber:
             description: 'Contact`s phone number'
             type: string
-            example: '123123123'
+            example: '1231231234'
+            pattern: '^[0-9]{10,15}$'
           email:
             description: 'Contact`s email'
             type: string
             example: 'alex34@gmail.com'
+            format: email
           isFavourite:
-            description: 'Whether is contact favorite or not'
+            description: 'Whether the contact is favorite or not'
             type: boolean
             example: false
           contactType:
             description: 'Contact`s type'
             type: string
             enum: ['work', 'home', 'personal']
+          photo:
+            description: 'Contact`s photo'
+            type: string
+            format: binary
 responses:
   '201':
-    description: Creates a contact
+    description: 'Successfully created a contact'
     content:
       application/json:
         schema:
@@ -57,6 +63,6 @@ responses:
               example: Successfully created a contact!
             data:
               type: object
-              $ref: ../../components/schemas/contact.yaml
+              $ref: '../../components/schemas/contact.yaml'
   '401':
     $ref: '../../components/responses/401.yaml'
