@@ -167,8 +167,6 @@
                 "required": [
                   "name",
                   "phoneNumber",
-                  "email",
-                  "isFavourite",
                   "contactType"
                 ],
                 "properties": {
@@ -334,13 +332,6 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "phoneNumber",
-                  "email",
-                  "isFavourite",
-                  "contactType"
-                ],
                 "properties": {
                   "name": {
                     "description": "Contact's name",
