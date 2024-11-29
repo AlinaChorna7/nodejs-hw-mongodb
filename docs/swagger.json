@@ -60,27 +60,6 @@
           },
           {
             "in": "query",
-            "name": "sortBy",
-            "schema": {
-              "type": "string"
-            },
-            "example": "name",
-            "description": "All contact's fields can be mentioned. Default value - name"
-          },
-          {
-            "in": "query",
-            "name": "sortOrder",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
-            },
-            "example": "asc"
-          },
-          {
-            "in": "query",
             "name": "contactType",
             "schema": {
               "type": "string",
